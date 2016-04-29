@@ -15,7 +15,7 @@ def parse_tools():
         print("Black Arch tool list not found!")
         answer = input("Generate the tool list? (Y/N): ")
         if answer.lower() == 'y':
-            system("sudo pacman -Sgg | grep blackarch > blackarchtools")
+            system("sudo pacman -Sgg | grep blackarch- > blackarchtools")
             blackarch_file = open("./blackarchtools")
         else:
             exit(0)
@@ -76,7 +76,8 @@ def display_sub_menu(category, ba_tools_dict):
             return
         elif choice in range(1, \
                              len(ba_tools_dict[category]) + 1): 
-            execute_program(programs[choice - 1])
+            display_program(programs[choice - 1])
+            input("Press [Enter] to continue: ")
 
 def get_input(option_list, message):
     '''
@@ -95,15 +96,12 @@ def get_input(option_list, message):
         sleep(2)
         choice = ""
 
-def execute_program(program):
+def display_program(program):
     '''
     Get arguments for the selected program, if any, and append it to the
     program's name.
     '''
-    print("Executing %s!" % program)
-    program = program + ' ' + ' '.join(input("Arguments []: ").split(' '))
-    system(program)
-    exit(0)
+    system("sudo pacman -Si %s" % program)
 
 if __name__=="__main__":
     tool_ids, ba_tools_dict = parse_tools()
